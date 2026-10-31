@@ -271,10 +271,9 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-hero__inner {
   display: grid;
-  grid-template-columns: minmax(0, 600px) 560px;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 600fr) minmax(0, 560fr);
   align-items: center;
-  column-gap: 80px;
+  column-gap: clamp(40px, 5.6vw, 80px);
   padding-top: 72px;
   padding-bottom: 80px;
 }
@@ -287,7 +286,7 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-hero__heading {
   max-width: 560px;
-  font: 800 88px/0.95 var(--lh-font-heading);
+  font: 800 clamp(56px, 6.12vw, 88px) / 0.95 var(--lh-font-heading);
   letter-spacing: -0.02em;
 }
 
@@ -326,28 +325,30 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-hero__visual {
   position: relative;
-  width: 560px;
-  height: 560px;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1;
+  justify-self: end;
 }
 
 .lh-hero__circle {
   position: absolute;
-  top: 40px;
-  left: 60px;
-  width: 500px;
-  height: 500px;
+  top: 7.14%;
+  left: 10.71%;
+  width: 89.29%;
+  height: 89.29%;
   border-radius: 50%;
   background: var(--lh-sand);
 }
 
 .lh-hero__image {
   position: absolute;
-  top: 10px;
-  left: 60px;
-  width: 440px;
-  height: 540px;
+  top: 1.79%;
+  left: 10.71%;
+  width: 78.57%;
+  height: 96.43%;
   overflow: hidden;
-  border-radius: 220px 220px 24px 24px;
+  border-radius: 50% 50% 24px 24px / 40.74% 40.74% 24px 24px;
   background: var(--lh-stone);
 }
 
@@ -361,7 +362,7 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-floating-card {
   position: absolute;
-  top: 420px;
+  top: 75%;
   left: 0;
   display: flex;
   align-items: center;
@@ -569,9 +570,8 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-featured__inner {
   display: grid;
-  grid-template-columns: minmax(0, 620px) minmax(0, 556px);
-  justify-content: space-between;
-  column-gap: 64px;
+  grid-template-columns: minmax(0, 620fr) minmax(0, 556fr);
+  column-gap: clamp(32px, 4.45vw, 64px);
   padding-block: 96px;
 }
 
@@ -1592,45 +1592,6 @@ html:has(dialog.lh-dialog[open]) {
 
 .lh-drawer__error:empty {
   display: none;
-}
-
-@media screen and (max-width: 1199px) {
-  .lh-hero__inner,
-  .lh-featured__inner {
-    column-gap: 40px;
-  }
-
-  .lh-hero__heading {
-    font-size: 72px;
-  }
-
-  .lh-hero__inner {
-    grid-template-columns: minmax(0, 1fr) 460px;
-  }
-
-  .lh-hero__visual {
-    width: 460px;
-    height: 460px;
-  }
-
-  .lh-hero__circle {
-    top: 33px;
-    left: 49px;
-    width: 411px;
-    height: 411px;
-  }
-
-  .lh-hero__image {
-    top: 8px;
-    left: 49px;
-    width: 362px;
-    height: 444px;
-    border-radius: 181px 181px 20px 20px;
-  }
-
-  .lh-floating-card {
-    top: 345px;
-  }
 }
 
 @media screen and (max-width: 989px) {
