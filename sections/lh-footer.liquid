@@ -1,0 +1,101 @@
+<footer class="lh lh-footer">
+  <div class="lh-container lh-footer__inner">
+    <div class="lh-footer__brand">
+      <p class="lh-footer__logo">{{ section.settings.brand | default: shop.name | escape }}</p>
+      {%- if section.settings.tagline != blank -%}
+        <p class="lh-footer__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="lh-footer__menus">
+      {%- for block in section.blocks -%}
+        {%- assign menu = block.settings.menu -%}
+        <nav class="lh-footer__menu" aria-labelledby="LhFooterMenu-{{ block.id }}" {{ block.shopify_attributes }}>
+          <h2 id="LhFooterMenu-{{ block.id }}" class="lh-footer__heading">
+            {{- block.settings.heading | default: menu.title | escape -}}
+          </h2>
+          {%- if menu.links.size > 0 -%}
+            <ul class="lh-footer__links">
+              {%- for link in menu.links -%}
+                <li>
+                  <a
+                    href="{{ link.url }}"
+                    class="lh-footer__link"
+                    {% if link.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- link.title | escape -}}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </nav>
+      {%- endfor -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Loomhaus footer",
+  "class": "lh-footer-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand",
+      "label": "Brand",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Clothes made to be worn for years, not seasons."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "info": "Defaults to the menu title"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus footer",
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop"
+          }
+        },
+        {
+          "type": "menu",
+          "settings": {
+            "heading": "Help"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

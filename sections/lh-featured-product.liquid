@@ -1,0 +1,366 @@
+{%- liquid
+  assign featured = section.settings.product
+  assign current = featured.selected_or_first_available_variant
+  assign images = featured.media | where: 'media_type', 'image'
+  assign badge = featured.metafields.custom.badge.value
+  assign rating = featured.metafields.reviews.rating.value
+  assign rating_count = featured.metafields.reviews.rating_count.value
+  assign highlight = featured.metafields.custom.highlight.value
+  assign offers = featured.metafields.custom.offers.value
+  assign save = 0
+  if current.compare_at_price > current.price
+    assign save = current.compare_at_price | minus: current.price | times: 100.0 | divided_by: current.compare_at_price | round
+  endif
+-%}
+{%- if featured != blank -%}
+  <lh-product-form
+    class="lh lh-featured"
+    data-selected="{{ current.options | json | escape }}"
+    aria-labelledby="LhFeaturedTitle-{{ section.id }}"
+    role="region"
+  >
+    <div class="lh-container lh-featured__inner">
+      <lh-gallery class="lh-gallery">
+        <div class="lh-gallery__main">
+          <ul class="lh-gallery__track" data-lh-gallery-track>
+            {%- for media in images -%}
+              <li class="lh-gallery__slide" data-lh-slide data-media-id="{{ media.id }}">
+                {{
+                  media
+                  | image_url: width: 1240
+                  | image_tag:
+                    widths: '390, 620, 930, 1240',
+                    sizes: '(min-width: 1200px) 620px, (min-width: 990px) 50vw, 100vw',
+                    loading: 'lazy',
+                    alt: media.alt
+                }}
+              </li>
+            {%- else -%}
+              <li class="lh-gallery__slide" data-lh-slide>{{ 'product-apparel-1' | placeholder_svg_tag }}</li>
+            {%- endfor -%}
+          </ul>
+          {%- if images.size > 1 -%}
+            <button
+              type="button"
+              class="lh-gallery__arrow lh-gallery__arrow--prev"
+              data-lh-gallery-step="-1"
+              aria-label="{{ 'loomhaus.previous_image' | t }}"
+            >
+              {%- render 'lh-icon', name: 'chevron-left' -%}
+            </button>
+            <button
+              type="button"
+              class="lh-gallery__arrow lh-gallery__arrow--next"
+              data-lh-gallery-step="1"
+              aria-label="{{ 'loomhaus.next_image' | t }}"
+            >
+              {%- render 'lh-icon', name: 'chevron-right' -%}
+            </button>
+          {%- endif -%}
+        </div>
+        {%- if images.size > 1 -%}
+          <div class="lh-gallery__thumbs">
+            {%- for media in images -%}
+              <button
+                type="button"
+                class="lh-gallery__thumb"
+                data-lh-gallery-go="{{ forloop.index0 }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-label="{{ 'loomhaus.show_image' | t: index: forloop.index }}"
+              >
+                {{ media | image_url: width: 168, height: 168, crop: 'top' | image_tag: loading: 'lazy', alt: '' }}
+              </button>
+            {%- endfor -%}
+          </div>
+          <div class="lh-gallery__dots">
+            {%- for media in images -%}
+              <button
+                type="button"
+                class="lh-gallery__dot"
+                data-lh-gallery-go="{{ forloop.index0 }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-label="{{ 'loomhaus.show_image' | t: index: forloop.index }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </lh-gallery>
+
+      <div class="lh-product-info">
+        {%- if badge != blank or rating != blank -%}
+          <div class="lh-product-info__top">
+            {%- if badge != blank -%}
+              <p class="lh-pill-badge lh-product-info__badge">{{ badge | escape }}</p>
+            {%- endif -%}
+            {%- if rating != blank -%}
+              {%- liquid
+                assign formatted_count = rating_count
+                if rating_count >= 1000
+                  assign thousands = rating_count | divided_by: 1000
+                  assign remainder = rating_count | modulo: 1000 | prepend: '00' | slice: -3, 3
+                  assign formatted_count = thousands | append: ',' | append: remainder
+                endif
+              -%}
+              <p class="lh-rating">
+                {%- render 'lh-icon', name: 'star' -%}
+                <span class="lh-rating__value">{{ rating.rating | round: 1 }}</span>
+                {%- if rating_count != blank -%}
+                  <span class="lh-rating__count">
+                    {{- section.settings.reviews_label | replace: '[count]', formatted_count | escape -}}
+                  </span>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <h2 id="LhFeaturedTitle-{{ section.id }}" class="lh-product-info__title">{{ featured.title | escape }}</h2>
+
+        <div class="lh-price">
+          <div class="lh-price__row">
+            <span class="lh-price__current" data-lh-price>{{ current.price | money }}</span>
+            <s class="lh-price__compare" data-lh-compare {% if save == 0 %}hidden{% endif %}>
+              {%- if save > 0 %}{{ current.compare_at_price | money }}{% endif -%}
+            </s>
+            <span
+              class="lh-price__save"
+              data-lh-save
+              data-template="{{ section.settings.save_label | escape }}"
+              {% if save == 0 %}
+                hidden
+              {% endif %}
+            >
+              {{- section.settings.save_label | replace: '[percent]', save -}}
+            </span>
+          </div>
+          {%- if section.settings.price_note != blank -%}
+            <p class="lh-price__note">{{ section.settings.price_note | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if highlight != blank -%}
+          <div class="lh-highlight">
+            {%- render 'lh-icon', name: 'check-circle' -%}
+            <div>
+              <p class="lh-highlight__title">{{ highlight.title.value | escape }}</p>
+              {%- if highlight.text != blank -%}
+                <p class="lh-highlight__text">{{ highlight.text.value | escape }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- for pass in (1..2) -%}
+        {%- for option in featured.options_with_values -%}
+          {%- liquid
+            assign option_index = option.position | minus: 1
+            assign option_name = option.name | downcase
+            assign is_color = false
+            if option_name == 'color' or option_name == 'colour'
+              assign is_color = true
+            endif
+            if pass == 1 and is_color == false
+              continue
+            elsif pass == 2 and is_color
+              continue
+            endif
+          -%}
+          <fieldset class="lh-option">
+            <legend class="lh-option__label">
+              {%- if is_color -%}
+                {{ option.name | escape }}: <span data-lh-selected-value="{{ option_index }}">{{ option.selected_value | escape }}</span>
+              {%- else -%}
+                {{ section.settings.option_label | replace: '[option]', option.name | escape }}
+              {%- endif -%}
+            </legend>
+            <div class="{% if is_color %}lh-swatches{% else %}lh-sizes{% endif %}">
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign option_key = 'option' | append: option.position
+                  assign matches = featured.variants | where: option_key, value
+                  for selected_value in current.options
+                    unless forloop.index0 == option_index
+                      assign other_key = 'option' | append: forloop.index
+                      assign matches = matches | where: other_key, selected_value
+                    endunless
+                  endfor
+                  assign option_variant = matches | first
+                  assign pressed = false
+                  if value == option.selected_value
+                    assign pressed = true
+                  endif
+                -%}
+                <button
+                  type="button"
+                  class="{% if is_color %}lh-swatch{% else %}lh-size{% endif %}"
+                  data-option-index="{{ option_index }}"
+                  data-option-value="{{ value | escape }}"
+                  aria-pressed="{{ pressed }}"
+                  {% if is_color %}
+                    aria-label="{{ value | escape }}"
+                  {% endif %}
+                  {% unless pressed or option_variant.available %}
+                    disabled
+                  {% endunless %}
+                >
+                  {%- if is_color -%}
+                    <span
+                      class="lh-swatch__color"
+                      style="--lh-swatch: {% render 'lh-swatch-color', value: value %}"
+                      aria-hidden="true"
+                    ></span>
+                  {%- else -%}
+                    {{- value | escape -}}
+                    <span class="lh-size__ribbon" data-lh-ribbon>
+                      {{- option_variant.metafields.custom.ribbon.value | escape -}}
+                    </span>
+                  {%- endif -%}
+                </button>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+        {%- endfor -%}
+
+        <div class="lh-buy">
+          <div class="lh-buy__row">
+            <div class="lh-quantity" role="group" aria-label="{{ 'loomhaus.quantity' | t }}">
+              <button
+                type="button"
+                class="lh-quantity__button"
+                data-lh-quantity-step="-1"
+                aria-label="{{ 'loomhaus.decrease_quantity' | t }}"
+                disabled
+              >
+                −
+              </button>
+              <span class="lh-quantity__value" data-lh-quantity-value aria-live="polite">01</span>
+              <button
+                type="button"
+                class="lh-quantity__button"
+                data-lh-quantity-step="1"
+                aria-label="{{ 'loomhaus.increase_quantity' | t }}"
+              >
+                +
+              </button>
+            </div>
+            <button
+              type="button"
+              class="lh-btn lh-btn--primary lh-btn--square"
+              data-lh-add
+              {% unless current.available %}
+                disabled
+              {% endunless %}
+            >
+              <span
+                data-lh-add-label
+                data-default="{{ 'products.product.add_to_cart' | t | escape }}"
+                data-sold-out="{{ 'products.product.sold_out' | t | escape }}"
+              >
+                {%- if current.available -%}
+                  {{- 'products.product.add_to_cart' | t -}}
+                {%- else -%}
+                  {{- 'products.product.sold_out' | t -}}
+                {%- endif -%}
+              </span>
+              {%- render 'lh-icon', name: 'arrow-right' -%}
+            </button>
+          </div>
+          <button
+            type="button"
+            class="lh-btn lh-btn--outline lh-btn--square lh-btn--block"
+            data-lh-buy-now
+            {% unless current.available %}
+              disabled
+            {% endunless %}
+          >
+            {{- 'loomhaus.buy_now' | t -}}
+          </button>
+          <p class="lh-form-error" data-lh-error role="alert"></p>
+        </div>
+
+        {%- if offers != blank -%}
+          <ul class="lh-offers">
+            {%- for offer in offers -%}
+              {%- assign factor = 100 | minus: offer.discount_percent.value -%}
+              <li class="lh-offer">
+                {%- render 'lh-icon', name: 'offer' -%}
+                <div class="lh-offer__text">
+                  <p class="lh-offer__title">
+                    {{- section.settings.offer_prefix | escape }}
+                    <span data-lh-offer-price="{{ forloop.index0 }}">
+                      {{- current.price | times: factor | divided_by: 100.0 | round | money -}}
+                    </span>
+                  </p>
+                  <p class="lh-offer__description">{{ offer.description.value | escape }}</p>
+                </div>
+                <button
+                  type="button"
+                  class="lh-offer__copy"
+                  data-lh-copy="{{ offer.code.value | escape }}"
+                  aria-label="{{ 'loomhaus.copy_code' | t: code: offer.code.value | escape }}"
+                >
+                  {%- render 'lh-icon', name: 'copy' -%}
+                  <span class="lh-offer__copied">{{ 'loomhaus.copied' | t }}</span>
+                </button>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- render 'lh-product-data', product: featured -%}
+  </lh-product-form>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Loomhaus featured product",
+  "class": "lh-featured-section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "reviews_label",
+      "label": "Reviews count label",
+      "info": "[count] is replaced with the review count",
+      "default": "([count]+ Reviews)"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Save badge label",
+      "info": "[percent] is replaced with the discount worked out from the compare-at price",
+      "default": "Save [percent]%"
+    },
+    {
+      "type": "text",
+      "id": "price_note",
+      "label": "Price note",
+      "default": "MRP inclusive of all taxes"
+    },
+    {
+      "type": "text",
+      "id": "option_label",
+      "label": "Option label",
+      "info": "[option] is replaced with the option name, e.g. Size",
+      "default": "Select [option]"
+    },
+    {
+      "type": "text",
+      "id": "offer_prefix",
+      "label": "Offer price prefix",
+      "default": "Get it for"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus featured product"
+    }
+  ]
+}
+{% endschema %}

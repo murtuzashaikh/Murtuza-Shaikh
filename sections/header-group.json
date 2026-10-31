@@ -11,51 +11,37 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
+    "announcement": {
+      "type": "lh-announcement-bar",
       "blocks": {
-        "announcement-bar-0": {
-          "type": "announcement",
+        "message_shipping": {
+          "type": "message",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping on orders over ₹999",
+            "link": ""
+          }
+        },
+        "message_code": {
+          "type": "message",
+          "settings": {
+            "text": "Use code LOOM10 for 10% off your first order",
             "link": ""
           }
         }
       },
-      "block_order": [
-        "announcement-bar-0"
-      ],
-      "settings": {
-        "auto_rotate": false,
-        "change_slides_speed": 5,
-        "color_scheme": "scheme-1",
-        "show_line_separator": true,
-        "show_social": false,
-        "enable_country_selector": false,
-        "enable_language_selector": false
-      }
+      "block_order": ["message_shipping", "message_code"],
+      "settings": {}
     },
     "header": {
-      "type": "header",
+      "type": "lh-header",
       "settings": {
-        "logo_position": "middle-left",
-        "mobile_logo_position": "center",
-        "menu": "main-menu",
-        "menu_type_desktop": "dropdown",
-        "sticky_header_type": "on-scroll-up",
-        "show_line_separator": true,
-        "color_scheme": "scheme-1",
-        "menu_color_scheme": "scheme-1",
-        "enable_country_selector": true,
-        "enable_language_selector": true,
-        "margin_bottom": 0,
-        "padding_top": 20,
-        "padding_bottom": 20
+        "logo_text": "Loomhaus",
+        "tagline": "Clothes made to be worn for years, not seasons.",
+        "button_label": "Shop the drop",
+        "button_link": "shopify://collections/all",
+        "cart_label": "Open cart"
       }
     }
   },
-  "order": [
-    "announcement-bar",
-    "header"
-  ]
+  "order": ["announcement", "header"]
 }

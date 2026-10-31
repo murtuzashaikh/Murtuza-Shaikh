@@ -1,0 +1,93 @@
+{%- capture cart_label -%}{{ section.settings.cart_label }} ([count]){%- endcapture -%}
+<header class="lh lh-header">
+  <div class="lh-container lh-header__inner">
+    <a href="{{ routes.root_url }}" class="lh-header__logo">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        {{ section.settings.logo_text | default: shop.name | escape }}
+      {%- endif -%}
+    </a>
+
+    {%- if section.settings.tagline != blank -%}
+      <p class="lh-header__tagline">{{ section.settings.tagline | escape }}</p>
+    {%- endif -%}
+
+    <div class="lh-header__actions">
+      {%- if section.settings.button_label != blank -%}
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="lh-btn lh-btn--secondary lh-header__button"
+        >
+          {{- section.settings.button_label | escape -}}
+          {%- render 'lh-icon', name: 'arrow-right' -%}
+        </a>
+      {%- endif -%}
+      <a
+        href="{{ routes.cart_url }}"
+        class="lh-header__cart"
+        data-lh-cart-open
+        data-label-template="{{ cart_label | escape }}"
+        aria-label="{{ cart_label | replace: '[count]', cart.item_count | escape }}"
+        aria-haspopup="dialog"
+      >
+        {%- render 'lh-icon', name: 'cart' -%}
+        <span class="lh-header__count" data-lh-cart-count aria-hidden="true" {% if cart.item_count == 0 %}hidden{% endif %}>
+          {{- cart.item_count -}}
+        </span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Loomhaus header",
+  "class": "lh-header-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Loomhaus"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image",
+      "info": "Replaces the logo text when set"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Header text",
+      "default": "Clothes made to be worn for years, not seasons."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the drop"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart button accessible label",
+      "default": "Open cart"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus header"
+    }
+  ]
+}
+{% endschema %}

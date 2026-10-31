@@ -1,0 +1,89 @@
+{%- if section.blocks.size > 0 -%}
+  <div
+    class="lh lh-marquee"
+    style="--lh-marquee-duration: {{ section.settings.duration }}s"
+    role="region"
+    aria-label="{{ section.settings.accessible_label | escape }}"
+  >
+    <div class="lh-marquee__track">
+      {%- for group in (1..2) -%}
+        <ul class="lh-marquee__group" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+          {%- for i in (1..section.settings.repeat) -%}
+            {%- for block in section.blocks -%}
+              <li
+                class="lh-marquee__item"
+                {% if forloop.parentloop.first and forloop.parentloop.parentloop.first %}
+                  {{ block.shopify_attributes }}
+                {% endif %}
+              >
+                {{ block.settings.text | escape }}
+              </li>
+            {%- endfor -%}
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Loomhaus marquee",
+  "class": "lh-marquee-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "Loop duration",
+      "min": 10,
+      "max": 80,
+      "step": 2,
+      "unit": "s",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "repeat",
+      "label": "Repeat items",
+      "info": "Increase when there are few items so the strip always fills the screen",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "accessible_label",
+      "label": "Accessible label",
+      "default": "Why Loomhaus"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Organic cotton"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Organic cotton" } },
+        { "type": "item", "settings": { "text": "Made to last" } },
+        { "type": "item", "settings": { "text": "Sizes XS to L" } },
+        { "type": "item", "settings": { "text": "Free returns" } },
+        { "type": "item", "settings": { "text": "Ethically made" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

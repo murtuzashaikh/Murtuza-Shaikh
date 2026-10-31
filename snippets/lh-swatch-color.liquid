@@ -1,0 +1,15 @@
+{%- comment -%}
+  Outputs the swatch colour for an option value from the colour_swatch metaobjects, falling back to the value itself.
+  Accepts:
+  - value: {String} Option value, e.g. Black
+{%- endcomment -%}
+{%- liquid
+  assign swatch_color = value | downcase
+  for swatch in shop.metaobjects.colour_swatch.values
+    if swatch.name.value == value
+      assign swatch_color = swatch.color.value
+      break
+    endif
+  endfor
+  echo swatch_color
+-%}

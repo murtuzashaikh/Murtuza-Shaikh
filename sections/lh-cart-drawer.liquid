@@ -1,0 +1,200 @@
+{%- liquid
+  assign auto_product = section.settings.auto_add_product
+  assign trigger_values = section.settings.trigger_values | split: ','
+  assign auto_variant = auto_product.selected_or_first_available_variant
+  for variant in auto_product.variants
+    assign matched = true
+    for trigger in trigger_values
+      assign wanted = trigger | strip | downcase
+      assign options = variant.options | join: '|' | downcase | split: '|'
+      unless options contains wanted
+        assign matched = false
+      endunless
+    endfor
+    if matched and variant.available
+      assign auto_variant = variant
+      break
+    endif
+  endfor
+-%}
+<lh-cart-drawer
+  class="lh"
+  data-auto-variant-id="{% if auto_product != blank %}{{ auto_variant.id }}{% endif %}"
+  data-trigger-values="{{ section.settings.trigger_values | escape }}"
+>
+  <dialog class="lh-dialog lh-drawer" aria-labelledby="LhCartTitle">
+    <div class="lh-drawer__panel" data-lh-drawer-panel data-item-count="{{ cart.item_count }}">
+      <div class="lh-drawer__head">
+        <h2 id="LhCartTitle" class="lh-drawer__title">
+          {{- section.settings.title | replace: '[count]', cart.item_count | escape -}}
+        </h2>
+        <button type="button" class="lh-icon-button" data-lh-cart-close aria-label="{{ 'accessibility.close' | t }}">
+          {%- render 'lh-icon', name: 'close' -%}
+        </button>
+      </div>
+
+      <div class="lh-drawer__body" data-lh-drawer-body>
+        {%- if cart.item_count > 0 -%}
+          <ul class="lh-drawer__items">
+            {%- assign ordered_items = cart.items | reverse -%}
+            {%- for pass in (1..2) -%}
+            {%- for item in ordered_items -%}
+              {%- liquid
+                assign is_auto = false
+                if item.properties._auto_added != blank
+                  assign is_auto = true
+                endif
+                if pass == 1 and is_auto
+                  continue
+                elsif pass == 2 and is_auto == false
+                  continue
+                endif
+              -%}
+              <li class="lh-line">
+                <div class="lh-line__image">
+                  {%- if item.image != blank -%}
+                    {{ item.image | image_url: width: 160, height: 192, crop: 'top' | image_tag: loading: 'lazy', alt: '' }}
+                  {%- endif -%}
+                </div>
+                <div class="lh-line__info">
+                  {%- if is_auto -%}
+                    <span class="lh-line__tag">{{ section.settings.auto_tag | escape }}</span>
+                  {%- endif -%}
+                  <a href="{{ item.url }}" class="lh-line__title">{{ item.product.title | escape }}</a>
+                  {%- unless item.product.has_only_default_variant -%}
+                    <p class="lh-line__variant">{{ item.variant.title | escape }}</p>
+                  {%- endunless -%}
+                  <div class="lh-line__actions">
+                    <div class="lh-line-qty" role="group" aria-label="{{ 'loomhaus.quantity' | t }}">
+                      <button
+                        type="button"
+                        class="lh-line-qty__button"
+                        data-line-key="{{ item.key }}"
+                        data-quantity="{{ item.quantity | minus: 1 }}"
+                        aria-label="{{ 'loomhaus.decrease_quantity' | t }}"
+                        {% if is_auto %}
+                          disabled
+                        {% endif %}
+                      >
+                        −
+                      </button>
+                      <span class="lh-line-qty__value">{{ item.quantity }}</span>
+                      <button
+                        type="button"
+                        class="lh-line-qty__button"
+                        data-line-key="{{ item.key }}"
+                        data-quantity="{{ item.quantity | plus: 1 }}"
+                        aria-label="{{ 'loomhaus.increase_quantity' | t }}"
+                        {% if is_auto %}
+                          disabled
+                        {% endif %}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      class="lh-line__remove"
+                      data-line-key="{{ item.key }}"
+                      data-quantity="0"
+                      {% if is_auto %}
+                        data-auto-line="true"
+                      {% endif %}
+                    >
+                      {{- 'loomhaus.remove' | t -}}
+                    </button>
+                  </div>
+                </div>
+                <p class="lh-line__price">
+                  {{- item.final_line_price | money -}}
+                  {%- if item.original_line_price > item.final_line_price -%}
+                    <s class="lh-line__compare">{{ item.original_line_price | money }}</s>
+                  {%- endif -%}
+                </p>
+              </li>
+            {%- endfor -%}
+            {%- endfor -%}
+          </ul>
+        {%- else -%}
+          <div class="lh-drawer__empty">
+            <p>{{ section.settings.empty_text | escape }}</p>
+            <a href="{{ routes.all_products_collection_url }}" class="lh-btn lh-btn--primary">
+              {{- 'general.continue_shopping' | t -}}
+              {%- render 'lh-icon', name: 'arrow-right' -%}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if cart.item_count > 0 -%}
+        <form action="{{ routes.cart_url }}" method="post" class="lh-drawer__foot">
+          <p class="lh-drawer__subtotal">
+            <span>{{ 'loomhaus.subtotal' | t }}</span>
+            <span class="lh-drawer__subtotal-value">{{ cart.total_price | money }}</span>
+          </p>
+          {%- if section.settings.note != blank -%}
+            <p class="lh-drawer__note">{{ section.settings.note | escape }}</p>
+          {%- endif -%}
+          <p class="lh-drawer__error" data-lh-drawer-error role="alert"></p>
+          <button type="submit" name="checkout" class="lh-btn lh-btn--primary lh-btn--square lh-btn--block">
+            {{- 'loomhaus.checkout' | t -}}
+            {%- render 'lh-icon', name: 'arrow-right' -%}
+          </button>
+        </form>
+      {%- else -%}
+        <p class="lh-drawer__error" data-lh-drawer-error role="alert"></p>
+      {%- endif -%}
+    </div>
+  </dialog>
+</lh-cart-drawer>
+
+{% schema %}
+{
+  "name": "Loomhaus cart drawer",
+  "class": "lh-cart-drawer-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "[count] is replaced with the number of items",
+      "default": "Your cart ([count])"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty cart text",
+      "default": "Your cart is empty."
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note",
+      "default": "Taxes included. Shipping calculated at checkout."
+    },
+    {
+      "type": "header",
+      "content": "Auto-added product"
+    },
+    {
+      "type": "product",
+      "id": "auto_add_product",
+      "label": "Product",
+      "info": "Added automatically when the cart contains an item with all the trigger option values"
+    },
+    {
+      "type": "text",
+      "id": "trigger_values",
+      "label": "Trigger option values",
+      "info": "Comma separated. The auto-added variant uses the same values when it has them",
+      "default": "Black, M"
+    },
+    {
+      "type": "text",
+      "id": "auto_tag",
+      "label": "Auto-added tag",
+      "default": "Auto-added"
+    }
+  ]
+}
+{% endschema %}
