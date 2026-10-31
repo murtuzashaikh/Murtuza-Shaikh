@@ -12,14 +12,14 @@ class LhProductForm extends HTMLElement {
 
   get variant() {
     if (this.selected.includes(null)) return null;
-    return this.variants.find((variant) => this.matches(variant)) || null;
+    return this.variants.find((variant) => this.matchesSelection(variant)) || null;
   }
 
   get previewVariant() {
-    return this.variant || this.variants.find((variant) => this.matches(variant, true)) || this.variants[0];
+    return this.variant || this.variants.find((variant) => this.matchesSelection(variant, true)) || this.variants[0];
   }
 
-  matches(variant, ignoreEmpty = false, overrides = {}) {
+  matchesSelection(variant, ignoreEmpty = false, overrides = {}) {
     return variant.options.every((value, index) => {
       const selected = index in overrides ? overrides[index] : this.selected[index];
       return (ignoreEmpty && selected === null) || value === selected;
@@ -27,11 +27,11 @@ class LhProductForm extends HTMLElement {
   }
 
   findFor(index, value) {
-    return this.variants.find((variant) => this.matches(variant, true, { [index]: value }));
+    return this.variants.find((variant) => this.matchesSelection(variant, true, { [index]: value }));
   }
 
   isAvailable(index, value) {
-    return this.variants.some((variant) => variant.available && this.matches(variant, true, { [index]: value }));
+    return this.variants.some((variant) => variant.available && this.matchesSelection(variant, true, { [index]: value }));
   }
 
   onClick(event) {
