@@ -8,6 +8,21 @@
  * ------------------------------------------------------------
  */
 {
+  "loomhaus": {
+    "choose_option": "Choose your {{ option }}",
+    "copy_code": "Copy code {{ code }}",
+    "copied": "Copied",
+    "show_image": "Show image {{ index }}",
+    "previous_image": "Previous image",
+    "next_image": "Next image",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "quantity": "Quantity",
+    "buy_now": "Buy it now",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout"
+  },
   "general": {
     "password_page": {
       "login_form_heading": "Belépés a webáruházba jelszóval:",

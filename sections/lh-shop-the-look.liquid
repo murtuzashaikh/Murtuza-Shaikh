@@ -1,0 +1,157 @@
+<section class="lh lh-looks" aria-labelledby="LhLooksHeading-{{ section.id }}">
+  <div class="lh-container lh-looks__inner">
+    <div class="lh-looks__head">
+      <div class="lh-looks__titles">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="lh-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 id="LhLooksHeading-{{ section.id }}" class="lh-section-heading">{{ section.settings.heading | escape }}</h2>
+      </div>
+      {%- if section.settings.hint != blank -%}
+        <p class="lh-looks__hint">{{ section.settings.hint | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="lh-looks__grid">
+      {%- for block in section.blocks -%}
+        {%- assign tile_product = block.settings.product -%}
+        <li
+          class="lh-look"
+          style="--lh-hotspot-x: {{ block.settings.hotspot_x }}%; --lh-hotspot-y: {{ block.settings.hotspot_y }}%"
+          {{ block.shopify_attributes }}
+        >
+          {%- assign image = block.settings.image | default: tile_product.featured_image -%}
+          {%- if image != blank -%}
+            {{
+              image
+              | image_url: width: 1200
+              | image_tag:
+                class: 'lh-look__image',
+                widths: '360, 480, 600, 800, 1200',
+                sizes: '(min-width: 1200px) 400px, (min-width: 990px) 33vw, 50vw',
+                alt: tile_product.title,
+                loading: 'lazy'
+            }}
+          {%- else -%}
+            {{ 'product-apparel-1' | placeholder_svg_tag: 'lh-look__image' }}
+          {%- endif -%}
+
+          {%- if tile_product != blank -%}
+            <button
+              type="button"
+              class="lh-hotspot"
+              data-lh-quick-view="{{ tile_product.url }}"
+              aria-haspopup="dialog"
+              aria-label="{{ section.settings.hotspot_label | replace: '[product]', tile_product.title | escape }}"
+            >
+              {%- render 'lh-icon', name: 'plus' -%}
+            </button>
+            <a href="{{ tile_product.url }}" class="lh-look__label">
+              <span class="lh-look__title">{{ tile_product.title | escape }}</span>
+              <span class="lh-look__price">{{ tile_product.selected_or_first_available_variant.price | money }}</span>
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <lh-quick-view>
+    <dialog class="lh-dialog lh-quick-view" aria-label="{{ section.settings.dialog_label | escape }}">
+      <div data-lh-quick-view-content></div>
+    </dialog>
+  </lh-quick-view>
+</section>
+
+{% schema %}
+{
+  "name": "Loomhaus shop the look",
+  "class": "lh-looks-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop the look"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loomhaus in the wild"
+    },
+    {
+      "type": "text",
+      "id": "hint",
+      "label": "Hint",
+      "default": "Tap the + on any look to shop it."
+    },
+    {
+      "type": "text",
+      "id": "hotspot_label",
+      "label": "Hotspot accessible label",
+      "info": "[product] is replaced with the product title",
+      "default": "Quick view [product]"
+    },
+    {
+      "type": "text",
+      "id": "dialog_label",
+      "label": "Quick view accessible label",
+      "default": "Quick view"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Optional. Defaults to the product's featured image"
+        },
+        {
+          "type": "range",
+          "id": "hotspot_x",
+          "label": "Hotspot horizontal position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 52
+        },
+        {
+          "type": "range",
+          "id": "hotspot_y",
+          "label": "Hotspot vertical position",
+          "min": 5,
+          "max": 95,
+          "step": 1,
+          "unit": "%",
+          "default": 30
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Loomhaus shop the look",
+      "blocks": [
+        { "type": "tile" },
+        { "type": "tile" },
+        { "type": "tile" },
+        { "type": "tile" },
+        { "type": "tile" },
+        { "type": "tile" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -198,6 +198,17 @@
           "settings": {
             "color_scheme": "scheme-1"
           }
+        },
+        "lh-cart-drawer": {
+          "type": "lh-cart-drawer",
+          "settings": {
+            "title": "Your cart ([count])",
+            "empty_text": "Your cart is empty.",
+            "note": "Taxes included. Shipping calculated at checkout.",
+            "auto_add_product": "dark-winter-jacket",
+            "trigger_values": "Black, M",
+            "auto_tag": "Auto-added"
+          }
         }
       }
     }

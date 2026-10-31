@@ -1,84 +1,105 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero": {
+      "type": "lh-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "stat_reviews": {
+          "type": "stat",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "value": "4.8★",
+            "label": "2,000+ reviews"
           }
         },
-        "button": {
-          "type": "buttons",
+        "stat_cotton": {
+          "type": "stat",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "value": "100%",
+            "label": "organic cotton"
+          }
+        },
+        "stat_returns": {
+          "type": "stat",
+          "settings": {
+            "value": "30 days",
+            "label": "free returns"
           }
         }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["stat_reviews", "stat_cotton", "stat_returns"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "badge": "NEW SEASON  ·  AUTUMN / WINTER",
+        "heading": "The Winter Edit",
+        "text": "Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "card_product": "yellow-wool-jumper",
+        "card_caption": "Bestseller this week"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "marquee": {
+      "type": "lh-marquee",
+      "blocks": {
+        "item_cotton": { "type": "item", "settings": { "text": "Organic cotton" } },
+        "item_last": { "type": "item", "settings": { "text": "Made to last" } },
+        "item_sizes": { "type": "item", "settings": { "text": "Sizes XS to L" } },
+        "item_returns": { "type": "item", "settings": { "text": "Free returns" } },
+        "item_ethical": { "type": "item", "settings": { "text": "Ethically made" } }
+      },
+      "block_order": ["item_cotton", "item_last", "item_sizes", "item_returns", "item_ethical"],
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "duration": 30,
+        "repeat": 2,
+        "accessible_label": "Why Loomhaus"
+      }
+    },
+    "looks": {
+      "type": "lh-shop-the-look",
+      "blocks": {
+        "tile_ocean": {
+          "type": "tile",
+          "settings": { "product": "ocean-blue-shirt", "hotspot_x": 52, "hotspot_y": 30 }
+        },
+        "tile_olive": {
+          "type": "tile",
+          "settings": { "product": "olive-green-jacket", "hotspot_x": 56, "hotspot_y": 42 }
+        },
+        "tile_navy": {
+          "type": "tile",
+          "settings": { "product": "navy-sport-jacket", "hotspot_x": 43, "hotspot_y": 36 }
+        },
+        "tile_blouse": {
+          "type": "tile",
+          "settings": { "product": "striped-silk-blouse", "hotspot_x": 52, "hotspot_y": 30 }
+        },
+        "tile_led": {
+          "type": "tile",
+          "settings": { "product": "led-high-tops", "hotspot_x": 44, "hotspot_y": 55 }
+        },
+        "tile_skirt": {
+          "type": "tile",
+          "settings": { "product": "striped-skirt-and-top", "hotspot_x": 52, "hotspot_y": 68 }
+        }
+      },
+      "block_order": ["tile_ocean", "tile_olive", "tile_navy", "tile_blouse", "tile_led", "tile_skirt"],
+      "settings": {
+        "eyebrow": "Shop the look",
+        "heading": "Loomhaus in the wild",
+        "hint": "Tap the + on any look to shop it.",
+        "hotspot_label": "Quick view [product]",
+        "dialog_label": "Quick view"
+      }
+    },
+    "featured": {
+      "type": "lh-featured-product",
+      "settings": {
+        "product": "classic-varsity-top",
+        "reviews_label": "([count]+ Reviews)",
+        "save_label": "Save [percent]%",
+        "price_note": "MRP inclusive of all taxes",
+        "option_label": "Select [option]",
+        "offer_prefix": "Get it for"
       }
     }
   },
-  "order": [
-    "image_banner",
-    "featured_collection"
-  ]
+  "order": ["hero", "marquee", "looks", "featured"]
 }
