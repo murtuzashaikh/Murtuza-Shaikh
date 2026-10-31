@@ -36,11 +36,20 @@
       <div class="lh-drawer__body" data-lh-drawer-body>
         {%- if cart.item_count > 0 -%}
           <ul class="lh-drawer__items">
-            {%- for item in cart.items -%}
-              {%- assign is_auto = false -%}
-              {%- if item.properties._auto_added != blank -%}
-                {%- assign is_auto = true -%}
-              {%- endif -%}
+            {%- assign ordered_items = cart.items | reverse -%}
+            {%- for pass in (1..2) -%}
+            {%- for item in ordered_items -%}
+              {%- liquid
+                assign is_auto = false
+                if item.properties._auto_added != blank
+                  assign is_auto = true
+                endif
+                if pass == 1 and is_auto
+                  continue
+                elsif pass == 2 and is_auto == false
+                  continue
+                endif
+              -%}
               <li class="lh-line">
                 <div class="lh-line__image">
                   {%- if item.image != blank -%}
@@ -103,6 +112,7 @@
                   {%- endif -%}
                 </p>
               </li>
+            {%- endfor -%}
             {%- endfor -%}
           </ul>
         {%- else -%}

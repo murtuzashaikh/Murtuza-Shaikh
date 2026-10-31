@@ -120,8 +120,8 @@
           "type": "tile",
           "settings": {
             "product": "navy-sport-jacket",
-            "hotspot_x": 43,
-            "hotspot_y": 36
+            "hotspot_x": 50,
+            "hotspot_y": 32
           }
         },
         "tile_blouse": {
