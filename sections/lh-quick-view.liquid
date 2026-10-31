@@ -44,10 +44,22 @@
       <p class="lh-qv__description">{{ product.description | strip_html | truncatewords: 40 }}</p>
     {%- endif -%}
 
+    {%- for pass in (1..2) -%}
     {%- for option in product.options_with_values -%}
-      {%- assign option_index = forloop.index0 -%}
-      {%- assign option_name = option.name | downcase -%}
-      {%- if option_name == 'color' or option_name == 'colour' -%}
+      {%- liquid
+        assign option_index = option.position | minus: 1
+        assign option_name = option.name | downcase
+        assign is_color = false
+        if option_name == 'color' or option_name == 'colour'
+          assign is_color = true
+        endif
+        if pass == 1 and is_color == false
+          continue
+        elsif pass == 2 and is_color
+          continue
+        endif
+      -%}
+      {%- if is_color -%}
         <fieldset class="lh-option">
           <legend class="lh-option__label">{{ option.name | escape }}</legend>
           <div class="lh-colors">
@@ -86,6 +98,7 @@
           </div>
         </div>
       {%- endif -%}
+    {%- endfor -%}
     {%- endfor -%}
 
     <button type="button" class="lh-btn lh-btn--primary lh-btn--square lh-btn--block" data-lh-add disabled>

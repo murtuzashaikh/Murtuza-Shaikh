@@ -150,13 +150,21 @@
           </div>
         {%- endif -%}
 
+        {%- for pass in (1..2) -%}
         {%- for option in featured.options_with_values -%}
-          {%- assign option_index = forloop.index0 -%}
-          {%- assign option_name = option.name | downcase -%}
-          {%- assign is_color = false -%}
-          {%- if option_name == 'color' or option_name == 'colour' -%}
-            {%- assign is_color = true -%}
-          {%- endif -%}
+          {%- liquid
+            assign option_index = option.position | minus: 1
+            assign option_name = option.name | downcase
+            assign is_color = false
+            if option_name == 'color' or option_name == 'colour'
+              assign is_color = true
+            endif
+            if pass == 1 and is_color == false
+              continue
+            elsif pass == 2 and is_color
+              continue
+            endif
+          -%}
           <fieldset class="lh-option">
             <legend class="lh-option__label">
               {%- if is_color -%}
@@ -211,6 +219,7 @@
               {%- endfor -%}
             </div>
           </fieldset>
+        {%- endfor -%}
         {%- endfor -%}
 
         <div class="lh-buy">
