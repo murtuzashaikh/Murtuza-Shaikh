@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -25,13 +34,18 @@
           }
         }
       },
-      "block_order": ["stat_reviews", "stat_cotton", "stat_returns"],
+      "block_order": [
+        "stat_reviews",
+        "stat_cotton",
+        "stat_returns"
+      ],
       "settings": {
         "badge": "NEW SEASON  ·  AUTUMN / WINTER",
         "heading": "The Winter Edit",
         "text": "Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.",
         "button_label": "Shop now",
         "button_link": "shopify://collections/all",
+        "image": "shopify://shop_images/loomhaus-hero.jpg",
         "card_product": "yellow-wool-jumper",
         "card_caption": "Bestseller this week"
       }
@@ -39,13 +53,44 @@
     "marquee": {
       "type": "lh-marquee",
       "blocks": {
-        "item_cotton": { "type": "item", "settings": { "text": "Organic cotton" } },
-        "item_last": { "type": "item", "settings": { "text": "Made to last" } },
-        "item_sizes": { "type": "item", "settings": { "text": "Sizes XS to L" } },
-        "item_returns": { "type": "item", "settings": { "text": "Free returns" } },
-        "item_ethical": { "type": "item", "settings": { "text": "Ethically made" } }
+        "item_cotton": {
+          "type": "item",
+          "settings": {
+            "text": "Organic cotton"
+          }
+        },
+        "item_last": {
+          "type": "item",
+          "settings": {
+            "text": "Made to last"
+          }
+        },
+        "item_sizes": {
+          "type": "item",
+          "settings": {
+            "text": "Sizes XS to L"
+          }
+        },
+        "item_returns": {
+          "type": "item",
+          "settings": {
+            "text": "Free returns"
+          }
+        },
+        "item_ethical": {
+          "type": "item",
+          "settings": {
+            "text": "Ethically made"
+          }
+        }
       },
-      "block_order": ["item_cotton", "item_last", "item_sizes", "item_returns", "item_ethical"],
+      "block_order": [
+        "item_cotton",
+        "item_last",
+        "item_sizes",
+        "item_returns",
+        "item_ethical"
+      ],
       "settings": {
         "duration": 30,
         "repeat": 2,
@@ -57,30 +102,61 @@
       "blocks": {
         "tile_ocean": {
           "type": "tile",
-          "settings": { "product": "ocean-blue-shirt", "hotspot_x": 52, "hotspot_y": 30 }
+          "settings": {
+            "product": "ocean-blue-shirt",
+            "hotspot_x": 52,
+            "hotspot_y": 30
+          }
         },
         "tile_olive": {
           "type": "tile",
-          "settings": { "product": "olive-green-jacket", "hotspot_x": 56, "hotspot_y": 42 }
+          "settings": {
+            "product": "olive-green-jacket",
+            "hotspot_x": 56,
+            "hotspot_y": 42
+          }
         },
         "tile_navy": {
           "type": "tile",
-          "settings": { "product": "navy-sport-jacket", "hotspot_x": 43, "hotspot_y": 36 }
+          "settings": {
+            "product": "navy-sport-jacket",
+            "hotspot_x": 43,
+            "hotspot_y": 36
+          }
         },
         "tile_blouse": {
           "type": "tile",
-          "settings": { "product": "striped-silk-blouse", "hotspot_x": 52, "hotspot_y": 30 }
+          "settings": {
+            "product": "striped-silk-blouse",
+            "hotspot_x": 52,
+            "hotspot_y": 30
+          }
         },
         "tile_led": {
           "type": "tile",
-          "settings": { "product": "led-high-tops", "hotspot_x": 44, "hotspot_y": 55 }
+          "settings": {
+            "product": "led-high-tops",
+            "hotspot_x": 44,
+            "hotspot_y": 55
+          }
         },
         "tile_skirt": {
           "type": "tile",
-          "settings": { "product": "striped-skirt-and-top", "hotspot_x": 52, "hotspot_y": 68 }
+          "settings": {
+            "product": "striped-skirt-and-top",
+            "hotspot_x": 52,
+            "hotspot_y": 68
+          }
         }
       },
-      "block_order": ["tile_ocean", "tile_olive", "tile_navy", "tile_blouse", "tile_led", "tile_skirt"],
+      "block_order": [
+        "tile_ocean",
+        "tile_olive",
+        "tile_navy",
+        "tile_blouse",
+        "tile_led",
+        "tile_skirt"
+      ],
       "settings": {
         "eyebrow": "Shop the look",
         "heading": "Loomhaus in the wild",
@@ -101,5 +177,10 @@
       }
     }
   },
-  "order": ["hero", "marquee", "looks", "featured"]
+  "order": [
+    "hero",
+    "marquee",
+    "looks",
+    "featured"
+  ]
 }
